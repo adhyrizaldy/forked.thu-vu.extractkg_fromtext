@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1200px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "white"}, "group": "Location", "id": "Swiss", "label": "Swiss", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Location", "id": "Amerika Serikat", "label": "Amerika Serikat", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Organization", "id": "Institute For Advanced Study", "label": "Institute For Advanced Study", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Organization", "id": "Aargauische Kantonsschule", "label": "Aargauische Kantonsschule", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Organization", "id": "Elektrotechnische Fabrik J. Einstein \u0026 Cie", "label": "Elektrotechnische Fabrik J. Einstein \u0026 Cie", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Organization", "id": "Gimnasium Luitpold", "label": "Gimnasium Luitpold", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Person", "id": "Bertrand Russell", "label": "Bertrand Russell", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Location", "id": "Jerman", "label": "Jerman", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Location", "id": "Ulm", "label": "Ulm", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Location", "id": "Kerajaan W\u00fcrttemberg", "label": "Kerajaan W\u00fcrttemberg", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Organization", "id": "Kantor Paten Swiss", "label": "Kantor Paten Swiss", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Person", "id": "Jakob Einstein", "label": "Jakob Einstein", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Person", "id": "Franklin D. Roosevelt", "label": "Franklin D. Roosevelt", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Person", "id": "Hermann Einstein", "label": "Hermann Einstein", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Award", "id": "Nobel Fisika", "label": "Nobel Fisika", "shape": "dot", "title": "Award"}, {"font": {"color": "white"}, "group": "Location", "id": "Kekaisaran Jerman", "label": "Kekaisaran Jerman", "shape": "dot", "title": "Location"}, {"font": {"color": "white"}, "group": "Organization", "id": "Eth Z\u00fcrich", "label": "Eth Z\u00fcrich", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Organization", "id": "Universitas Zurich", "label": "Universitas Zurich", "shape": "dot", "title": "Organization"}, {"font": {"color": "white"}, "group": "Concept", "id": "Manifesto Russell\u2013Einstein", "label": "Manifesto Russell\u2013Einstein", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Person", "id": "Pauline Koch", "label": "Pauline Koch", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Person", "id": "Albert Einstein", "label": "Albert Einstein", "shape": "dot", "title": "Person"}, {"font": {"color": "white"}, "group": "Organization", "id": "Akademi Sains Prusia", "label": "Akademi Sains Prusia", "shape": "dot", "title": "Organization"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Albert Einstein", "label": "child_of", "to": "Hermann Einstein"}, {"arrows": "to", "from": "Albert Einstein", "label": "child_of", "to": "Pauline Koch"}, {"arrows": "to", "from": "Hermann Einstein", "label": "sibling", "to": "Jakob Einstein"}, {"arrows": "to", "from": "Albert Einstein", "label": "born_in", "to": "Ulm"}, {"arrows": "to", "from": "Ulm", "label": "located_in", "to": "Kerajaan W\u00fcrttemberg"}, {"arrows": "to", "from": "Kerajaan W\u00fcrttemberg", "label": "located_in", "to": "Kekaisaran Jerman"}, {"arrows": "to", "from": "Albert Einstein", "label": "educated_at", "to": "Gimnasium Luitpold"}, {"arrows": "to", "from": "Albert Einstein", "label": "educated_at", "to": "Aargauische Kantonsschule"}, {"arrows": "to", "from": "Albert Einstein", "label": "educated_at", "to": "Eth Z\u00fcrich"}, {"arrows": "to", "from": "Albert Einstein", "label": "educated_at", "to": "Universitas Zurich"}, {"arrows": "to", "from": "Albert Einstein", "label": "employee_of", "to": "Kantor Paten Swiss"}, {"arrows": "to", "from": "Albert Einstein", "label": "employee_of", "to": "Universitas Zurich"}, {"arrows": "to", "from": "Albert Einstein", "label": "member_of", "to": "Akademi Sains Prusia"}, {"arrows": "to", "from": "Albert Einstein", "label": "employee_of", "to": "Institute For Advanced Study"}, {"arrows": "to", "from": "Albert Einstein", "label": "received", "to": "Nobel Fisika"}, {"arrows": "to", "from": "Albert Einstein", "label": "citizen_of", "to": "Jerman"}, {"arrows": "to", "from": "Albert Einstein", "label": "citizen_of", "to": "Swiss"}, {"arrows": "to", "from": "Albert Einstein", "label": "citizen_of", "to": "Amerika Serikat"}, {"arrows": "to", "from": "Hermann Einstein", "label": "founder_of", "to": "Elektrotechnische Fabrik J. Einstein \u0026 Cie"}, {"arrows": "to", "from": "Jakob Einstein", "label": "founder_of", "to": "Elektrotechnische Fabrik J. Einstein \u0026 Cie"}, {"arrows": "to", "from": "Albert Einstein", "label": "signatory", "to": "Manifesto Russell\u2013Einstein"}, {"arrows": "to", "from": "Bertrand Russell", "label": "signatory", "to": "Manifesto Russell\u2013Einstein"}, {"arrows": "to", "from": "Albert Einstein", "label": "communicated_with", "to": "Franklin D. Roosevelt"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"forceAtlas2Based": {"gravitationalConstant": -100, "centralGravity": 0.01, "springLength": 200, "springConstant": 0.08}, "minVelocity": 0.75, "solver": "forceAtlas2Based"}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
